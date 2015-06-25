@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Faulhaber Motor Controller</string>
 
-    <string name="hello_world">Hello world!</string>
+    <string name="mainpage">Motor Control</string>
     <string name="action_settings">Settings</string>
+    <string name="action_connect">Connect</string>
+    <string name="title_activity_connect">Connect</string>
+
+    <string name="hello_world">Hello world!</string>
 </resources>
