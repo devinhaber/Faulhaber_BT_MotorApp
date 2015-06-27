@@ -1,6 +1,7 @@
 package com.example.devin.faulhabermotorcontroller;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothSocket;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -23,6 +24,7 @@ import java.util.HashMap;
 public class ConnectActivity extends ActionBarActivity {
     private ArrayAdapter arrayadapt;
     private HashMap<String, BluetoothDevice> devices;
+    private boolean connecting;
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -40,12 +42,16 @@ public class ConnectActivity extends ActionBarActivity {
         ListView list = (ListView) findViewById(R.id.list);
         list.setAdapter(arrayadapt);
         devices = new HashMap<String, BluetoothDevice>();
+        connecting = false;
         setContentView(R.layout.activity_connect);
     }
 
     public void discoverBT(View view){
         Button button = (Button) view;
         BluetoothAdapter btadapter = BluetoothAdapter.getDefaultAdapter();
+        if(connecting){
+            return;
+        }
         if(button.getText().equals("Begin Discovery")) {
 
 
@@ -68,16 +74,22 @@ public class ConnectActivity extends ActionBarActivity {
     }
 
     public void connect(View view){
+        if(connecting){
+            return;
+        }
         BluetoothAdapter btadapter = BluetoothAdapter.getDefaultAdapter();
         LinearLayout line = (LinearLayout) view.getParent();
         String text = ((TextView) line.getChildAt(0)).getText().toString();
         String address = text.substring(text.indexOf("|") + 1);
         BluetoothDevice device = devices.get(address);
         btadapter.cancelDiscovery();
-        //Insert new thread - if connection is successful,proceed
-        //Don't forget to add something to switch to new activity
+        new ConnectThread(device, this).run();
+        connecting = true;
 
+    }
 
+    public void manageConnectedSocket(BluetoothSocket socket){
+        //Manage my connection - don't forget ways to go back!
     }
 
 
