@@ -24,6 +24,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.devin.faulhabermotorcontroller.MainActivity" />
         </activity>
+        <activity
+            android:name=".ControlActivity"
+            android:label="@string/title_activity_control"
+            android:parentActivityName=".ConnectActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.devin.faulhabermotorcontroller.ConnectActivity" />
+        </activity>
     </application>
 
 </manifest>

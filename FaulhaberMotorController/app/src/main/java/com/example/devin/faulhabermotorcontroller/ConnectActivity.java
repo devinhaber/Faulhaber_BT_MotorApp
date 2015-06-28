@@ -86,10 +86,18 @@ public class ConnectActivity extends ActionBarActivity {
         new ConnectThread(device, this).run();
         connecting = true;
 
+
     }
 
     public void manageConnectedSocket(BluetoothSocket socket){
-        //Manage my connection - don't forget ways to go back!
+        connecting = false;
+        Bridge.updateSocket(socket);
+        Intent controlintent = new Intent(this, ControlActivity.class);
+        startActivity(controlintent);
+    }
+
+    public void killPage(){
+        finish();
     }
 
 

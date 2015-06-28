@@ -51,6 +51,7 @@ public class MainActivity extends ActionBarActivity {
                 } else{
                     Intent connectintent = new Intent(this, ConnectActivity.class);
                     startActivity(connectintent);
+                    finish();
                 }
             }
 
@@ -66,6 +67,7 @@ public class MainActivity extends ActionBarActivity {
        if (resultCode == -1){
            Intent connectintent = new Intent(this, ConnectActivity.class);
            startActivity(connectintent);
+           finish();
        } else{
            return;
        }
