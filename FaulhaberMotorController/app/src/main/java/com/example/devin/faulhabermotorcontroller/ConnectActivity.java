@@ -94,9 +94,13 @@ public class ConnectActivity extends ActionBarActivity {
         Bridge.updateSocket(socket);
         Intent controlintent = new Intent(this, ControlActivity.class);
         startActivity(controlintent);
+        finish();
     }
 
-    public void killPage(){
+    public void back(View view){
+        BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
+        Bridge.updateSocket(null);
+        startActivity(new Intent(this, MainActivity.class));
         finish();
     }
 

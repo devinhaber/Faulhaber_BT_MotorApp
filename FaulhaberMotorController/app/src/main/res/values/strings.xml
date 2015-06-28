@@ -8,4 +8,14 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_control">Control</string>
+
+    <string name="changeSpeedDown">Placeholder</string>
+    <string name="changeSpeedUp">Placeholder</string>
+    <string name="setSpeed">Placeholder</string>
+    <string name="changePositionDown">Placeholder</string>
+    <string name="changePositionUp">Placeholder</string>
+    <string name="setPosition">Placeholder</string>
+    <string name="stop">Placeholder</string>
+    <string name="changeSpeedAmount">Placeholder</string>
+    <string name="changePositionAmount">Placeholder</string>
 </resources>
