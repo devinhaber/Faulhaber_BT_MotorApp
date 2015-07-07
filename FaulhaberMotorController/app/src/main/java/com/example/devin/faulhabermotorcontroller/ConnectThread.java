@@ -5,6 +5,8 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.UUID;
 
 import java.io.IOException;
@@ -15,20 +17,32 @@ import java.lang.Thread;
 public class ConnectThread extends Thread {
     private BluetoothSocket socket;
     private BluetoothDevice device;
-    private BluetoothAdapter adapter;
-    private final UUID my_UUID = UUID.fromString(""); //Actual UUID should be here
+    private final BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+    private final UUID my_UUID = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb"); //Actual UUID should be here
     private ConnectActivity context;
 
     public ConnectThread(BluetoothDevice device, ConnectActivity context) {
         // Use a temporary object that is later assigned to mmSocket,
         // because mmSocket is final
-        BluetoothSocket socket = null;
+        socket = null;
         this.context = context;
         // Get a BluetoothSocket to connect with the given BluetoothDevice
         try {
+            adapter.cancelDiscovery();
             // MY_UUID is the app's UUID string, also used by the server code
-            socket = device.createRfcommSocketToServiceRecord(my_UUID);
-        } catch (IOException e) { }
+            Method m = device.getClass().getMethod("createRfcommSocket", new Class[] { int.class });
+            System.out.println(m.toString());
+            socket = (BluetoothSocket) m.invoke(device, 1);
+            System.out.println(socket.toString());
+        }
+            catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
 
     }
 

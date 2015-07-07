@@ -9,13 +9,13 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_control">Control</string>
 
-    <string name="changeSpeedDown">Placeholder</string>
-    <string name="changeSpeedUp">Placeholder</string>
-    <string name="setSpeed">Placeholder</string>
-    <string name="changePositionDown">Placeholder</string>
-    <string name="changePositionUp">Placeholder</string>
-    <string name="setPosition">Placeholder</string>
-    <string name="stop">Placeholder</string>
-    <string name="changeSpeedAmount">Placeholder</string>
-    <string name="changePositionAmount">Placeholder</string>
+    <string name="changeSpeedDown">V</string>
+    <string name="changeSpeedUp">V</string>
+    <string name="setSpeed">V</string>
+    <string name="changePositionDown">LA</string>
+    <string name="changePositionUp">LA</string>
+    <string name="setPosition">LA</string>
+    <string name="stop">V0</string>
+    <string name="changeSpeedAmount">100</string>
+    <string name="changePositionAmount">1000</string>
 </resources>

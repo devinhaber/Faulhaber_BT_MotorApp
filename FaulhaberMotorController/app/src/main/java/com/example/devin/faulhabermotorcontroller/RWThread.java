@@ -2,6 +2,8 @@ package com.example.devin.faulhabermotorcontroller;
 
 import android.bluetooth.BluetoothSocket;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -12,14 +14,14 @@ import java.io.OutputStream;
 public class RWThread extends Thread {
 
     BluetoothSocket socket;
-    InputStream inStream;
-    OutputStream outStream;
+    BufferedInputStream inStream;
+    BufferedOutputStream outStream;
 
     public RWThread(BluetoothSocket socket){
         this.socket = socket;
         try{
-            inStream = socket.getInputStream();
-            outStream = socket.getOutputStream();
+            inStream = new BufferedInputStream(socket.getInputStream());
+            outStream = new BufferedOutputStream(socket.getOutputStream());
         } catch (IOException e) {
 
         }
@@ -40,9 +42,15 @@ public class RWThread extends Thread {
 
     public void write(byte[] data){
         try{
+            for(int i = 0; i < data.length;i++){
+            System.out.println((char)data[i]);}
             outStream.write(data);
+            outStream.write((byte) 13); //ASCII Carriage Return
+            System.out.println((char) (byte) 13);
+            outStream.flush();
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("Write Error");
         }
 
 
@@ -50,6 +58,8 @@ public class RWThread extends Thread {
 
     public void cancel(){
         try{
+            outStream.close();
+            inStream.close();
             socket.close();
         } catch (IOException e) {
             e.printStackTrace();

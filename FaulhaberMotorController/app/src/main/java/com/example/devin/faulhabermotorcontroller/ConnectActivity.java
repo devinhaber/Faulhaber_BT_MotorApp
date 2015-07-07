@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothSocket;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,15 +23,17 @@ import java.util.HashMap;
 
 
 public class ConnectActivity extends ActionBarActivity {
-    private ArrayAdapter arrayadapt;
-    private HashMap<String, BluetoothDevice> devices;
+    private  ArrayAdapter arrayadapt;
+    private final HashMap<String, BluetoothDevice> devices = new HashMap<>();
     private boolean connecting;
+    private boolean registered;
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 devices.put(device.getAddress(), device);
+                System.out.println("Found One");
                 arrayadapt.add(device.getName() + "|" + device.getAddress());
             }
         }
@@ -38,12 +41,14 @@ public class ConnectActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        arrayadapt = new ArrayAdapter(this, R.layout.basiclist);
-        ListView list = (ListView) findViewById(R.id.list);
-        list.setAdapter(arrayadapt);
-        devices = new HashMap<String, BluetoothDevice>();
-        connecting = false;
         setContentView(R.layout.activity_connect);
+        arrayadapt = new ArrayAdapter(this, R.layout.basiclist);
+        ListView list = (ListView) findViewById(R.id.connectlist);
+        list.setAdapter(arrayadapt);
+        devices.clear();
+        connecting = false;
+        registered = false;
+
     }
 
     public void discoverBT(View view){
@@ -60,12 +65,16 @@ public class ConnectActivity extends ActionBarActivity {
             // Register the BroadcastReceiver
             IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
             registerReceiver(mReceiver, filter);
+            registered = true;
             button.setText("Cancel Discovery");
+            btadapter.startDiscovery();
         } else {
             btadapter.cancelDiscovery();
+            unregisterReceiver(mReceiver);
+            registered = false;
             button.setText("Begin Discovery");
-            devices = new HashMap<String, BluetoothDevice>();
-            arrayadapt = new ArrayAdapter(this, R.layout.basiclist);
+            devices.clear();
+            arrayadapt.clear();
         }
 
 
@@ -78,11 +87,14 @@ public class ConnectActivity extends ActionBarActivity {
             return;
         }
         BluetoothAdapter btadapter = BluetoothAdapter.getDefaultAdapter();
-        LinearLayout line = (LinearLayout) view.getParent();
-        String text = ((TextView) line.getChildAt(0)).getText().toString();
+        TextView line = (TextView) view;
+        String text = line.getText().toString();
         String address = text.substring(text.indexOf("|") + 1);
+        System.out.println(address);
         BluetoothDevice device = devices.get(address);
         btadapter.cancelDiscovery();
+        unregisterReceiver(mReceiver);
+        registered = false;
         new ConnectThread(device, this).run();
         connecting = true;
 
@@ -99,6 +111,8 @@ public class ConnectActivity extends ActionBarActivity {
 
     public void back(View view){
         BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
+        if(registered){
+        unregisterReceiver(mReceiver);}
         Bridge.updateSocket(null);
         startActivity(new Intent(this, MainActivity.class));
         finish();
