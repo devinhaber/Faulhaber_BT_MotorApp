@@ -13,8 +13,9 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Proceed"
+        android:text="Begin"
         android:onClick="proceed"
+
         android:id="@+id/button2"
         android:layout_below="@+id/textView"
         android:layout_alignParentLeft="true"
