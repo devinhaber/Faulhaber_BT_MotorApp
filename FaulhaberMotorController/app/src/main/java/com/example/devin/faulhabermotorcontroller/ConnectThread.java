@@ -18,18 +18,16 @@ public class ConnectThread extends Thread {
     private BluetoothSocket socket;
     private BluetoothDevice device;
     private final BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
-    private final UUID my_UUID = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb"); //Actual UUID should be here
     private ConnectActivity context;
 
     public ConnectThread(BluetoothDevice device, ConnectActivity context) {
-        // Use a temporary object that is later assigned to mmSocket,
-        // because mmSocket is final
+
         socket = null;
         this.context = context;
         // Get a BluetoothSocket to connect with the given BluetoothDevice
         try {
             adapter.cancelDiscovery();
-            // MY_UUID is the app's UUID string, also used by the server code
+
             Method m = device.getClass().getMethod("createRfcommSocket", new Class[] { int.class });
             System.out.println(m.toString());
             socket = (BluetoothSocket) m.invoke(device, 1);
